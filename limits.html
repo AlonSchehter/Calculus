@@ -49,7 +49,7 @@ if(typeof module!=='undefined')module.exports=LimitsCore;
 </script><script>'use strict';
 const $=id=>document.getElementById(id),C=LimitsCore;
 let english=false;try{english=localStorage.getItem('calculus.language')==='en';}catch{}
-const presets=['sin(x+y)','x*y^2/(x^2+y^4)','abs(x)/sqrt(x^2+y^2)','x*y^3/(x^2+y^2)','sin(x^2+y^2)/(x^2+y^2)'];
+const presets=['sin(x+y)','x*y^2/(x^2+y^4)','abs(x)/sqrt(x^2+y^2)','x*sin(1/(x^2+y^2))','x*y^3/(x^2+y^2)','sin(x^2+y^2)/(x^2+y^2)'];
 const pathPresets=[['0','t'],['t','0'],['t','t'],['t','t^2'],['t^2','t'],['t','t^alpha'],['t^alpha','t']];
 const colors=['#df3546','#ed8424','#c8a513','#299555','#2488d1','#5546b7','#a449bd'];
 let fn=C.compile(presets[0]),selected=0,paths=[],nextId=0,t=1,playing=false,lastTime=0,showSurface=true,alpha=.65,beta=.58,zoom=1,mesh=[],dirty=true,surfaceCacheKey='';
@@ -87,6 +87,7 @@ function draw(){if(!w||!h)return;ctx.clearRect(0,0,w,h);const key=[alpha,beta,zo
 let gesture=null;canvas.onpointerdown=e=>{if(e.button!==0)return;gesture=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);canvas.classList.add('dragging');};canvas.onpointermove=e=>{if(!gesture)return;alpha+=(e.clientX-gesture[0])*.008;beta=Math.max(-1.25,Math.min(1.25,beta+(e.clientY-gesture[1])*.008));gesture=[e.clientX,e.clientY];dirty=true;};canvas.onpointerup=canvas.onpointercancel=()=>{gesture=null;canvas.classList.remove('dragging');};function setZoom(v){zoom=Math.max(.25,Math.min(8,v));dirty=true;}canvas.onwheel=e=>{e.preventDefault();setZoom(zoom*Math.exp(-e.deltaY*.001));};canvas.addEventListener('wheel',e=>e.preventDefault(),{passive:false});canvas.onkeydown=e=>{if(e.key==='ArrowLeft')alpha-=.1;else if(e.key==='ArrowRight')alpha+=.1;else if(e.key==='ArrowUp')beta=Math.min(1.25,beta+.1);else if(e.key==='ArrowDown')beta=Math.max(-1.25,beta-.1);else if(e.key==='+'||e.key==='=')setZoom(zoom*1.2);else if(e.key==='-')setZoom(zoom/1.2);else return;e.preventDefault();dirty=true;};$('zoomIn').onclick=()=>setZoom(zoom*1.2);$('zoomOut').onclick=()=>setZoom(zoom/1.2);$('reset').onclick=()=>{alpha=.65;beta=.58;zoom=1;dirty=true;};$('surfaceToggle').onclick=()=>{showSurface=!showSurface;$('surfaceToggle').setAttribute('aria-pressed',String(showSurface));dirty=true;};new ResizeObserver(resize).observe(canvas);
 function frame(now){if(playing){const dt=Math.min(.05,(now-lastTime)/1000||0);t=Math.max(1e-4,t*10**(-dt*.35));if(t<=1e-4)playing=false;updateTime();}lastTime=now;if(dirty){dirty=false;draw();}requestAnimationFrame(frame);}
 rebuildMesh();addPath('t','0');addPath('t','t');resize();requestAnimationFrame(frame);
+
 
 </script>
 <!-- presentation-ink:start --><script>(()=>{
