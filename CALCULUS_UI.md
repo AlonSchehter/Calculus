@@ -18,3 +18,5 @@ Surface transparency controls use the label **Transparency / שקיפות**.
 (including Function Composition's embedded renderer) default to 65%.
 Provide a compact slider and a click-to-edit percentage with Enter to apply
 and Escape to cancel. Preserve the established palette and shading.
+
+All editable formulas accept plain or backslash sqrt with braces or parentheses, and frac with braced pairs, paired parentheses or comma-separated arguments. Shared FormulaInput normalizes nested expressions before editor submission, including embedded activities. Parentheses size to their enclosed contents. Category order: Series, Geometry, Derivatives.
