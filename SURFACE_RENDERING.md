@@ -33,3 +33,6 @@ Current authoring and regression files are in
 No finite mesh resolves arbitrarily rapid oscillations at a singularity.
 The limits surface preview was inspected from the actual raster output;
 full browser layout and interaction were not visually verified in this update.
+
+The agreed rendering convention applies to all calculus activities and future mathematical apps: use continuous smooth shading, interpolated camera-space normals, no visible triangulation or triangle strokes, clean transparency without overlapping-face seams, and depth-aware instructional curves and shaded point markers. Preserve derivative color roles and stable axes. Reuse SurfaceQuality lighting. Partial derivatives now uses that same lighting with screen coordinates converted consistently to camera coordinates before computing normals; its transparent raster coat is composited once. These requirements are also persisted in the global AGENTS.md and calculus-app skill.
+
