@@ -79,7 +79,7 @@ let substitutionEpoch=0;
 const rawMathHTML=mathHTML;
 // Prime glyphs already carry their vertical offset: keep them on the normal baseline.
 function prettyMath(t){return rawMathHTML(t).replace(/<msup>(<mi[^>]*>[\s\S]*?<\/mi>)<mo[^>]*>′<\/mo><\/msup>/g,'<mrow>$1<mo class="natural-prime">′</mo></mrow>');}
-function colorVariables(root){for(const node of root.querySelectorAll('mi')){const name=node.textContent;node.setAttribute('mathcolor',(model?.params||['u','v','w']).includes(name)?'#d62e40':outputNames.includes(name)?'#2463d5':'#38445c');}}
+function colorVariables(root){const names=new Set(['u','v','w',...(model?.params||[])]);for(const name of model?.params||[]){const sample=document.createElement('span');sample.innerHTML=prettyMath(variable(name));const symbol=sample.querySelector('semantics')?.firstElementChild;if(symbol)names.add(symbol.textContent);}const color=name=>outputNames.includes(name)?'#2463d5':names.has(name)?'#d62e40':'#38445c';for(const node of root.querySelectorAll('mi'))node.setAttribute('mathcolor',color(node.textContent));for(const row of root.querySelectorAll('mrow')){if(names.has(row.textContent)||outputNames.includes(row.textContent)){row.setAttribute('mathcolor',color(row.textContent));for(const node of row.querySelectorAll('mi,mn'))node.setAttribute('mathcolor',color(row.textContent));}}}
 function expandedNode(i){const terms=model.gradient.map((g,k)=>new math.OperatorNode('*','multiply',[substitute(g),model.partials[i][k].cloneDeep()]));return terms.reduce((a,b)=>new math.OperatorNode('+','add',[a,b]));}
 function expansionFormula(i){return compoundName(i)+'='+tex(expandedNode(i));}
 function finalFormula(i){return compoundName(i)+'='+tex(polynomialResult(expandedNode(i)));}
