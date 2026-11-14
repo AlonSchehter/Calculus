@@ -103,5 +103,5 @@ function alignCalculations(){for(const group of document.querySelectorAll('.chai
 const fitBeforeAlignedCalculations=fit;fit=function(){fitBeforeAlignedCalculations();alignCalculations();};
 
 function pairedTuple(nodes){return (nodes.length>1?'<mo>(</mo>':'')+nodes.map((node,k)=>'<mrow data-dot-pair="'+k+'">'+mathBody(tex(node))+'</mrow>').join('<mo>,</mo>')+(nodes.length>1?'<mo>)</mo>':'');}
-function expandedPairLine(i){const line=document.createElement('div');line.className='formula expanded-line';line.innerHTML='<math xmlns="http://www.w3.org/1998/Math/MathML"><mrow>'+mathBody(compoundName(i))+'<mo>=</mo>'+model.gradient.map((g,k)=>'<mrow data-dot-pair="'+k+'">'+mathBody(tex(new math.OperatorNode('*','multiply',[substitute(g),model.partials[i][k].cloneDeep()])))+'</mrow>').join('<mo>+</mo>')+'</mrow></math>';return line;}
+function expandedPairLine(i){const line=document.createElement('div');line.className='formula expanded-line';line.innerHTML='<math xmlns="http://www.w3.org/1998/Math/MathML"><mrow>'+mathBody(compoundName(i))+'<mo>=</mo>'+model.gradient.map((g,k)=>[substitute(g),model.partials[i][k]].map(node=>'<mrow data-dot-pair="'+k+'">'+mathBody(node.isOperatorNode&&['+','-'].includes(node.op)?'\\left('+tex(node)+'\\right)':tex(node))+'</mrow>').join('<mo>·</mo>')).join('<mo>+</mo>')+'</mrow></math>';return line;}
 </script></body></html>
