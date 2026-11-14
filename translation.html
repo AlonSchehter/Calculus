@@ -101,9 +101,9 @@ draw=function(){if(!isImplicit())return explicitDraw();if(!W||!H)return;unit=Mat
 
 const scales=names.map(()=>[1,1,1]);
 const unscaledBasePoint=basePoint,unscaledResidual=residual,unscaledGrouped=grouped;
-basePoint=function(u,v){return unscaledBasePoint(u,v).map((x,i)=>x*scales[kind][i]);};
+basePoint=function(u,v){return unscaledBasePoint(u,v).map((x,i)=>kind===0&&i===2?x:x*scales[kind][i]);};
 offsetImplicit=function(p){return p.map((v,i)=>v*scales[kind][i]+translation()[i]);};
-residual=function(p){if(scales[kind].some((v,i)=>v===0&&(!is2D()||i<2)))return NaN;return unscaledResidual(p.map((v,i)=>(v-translation()[i])/scales[kind][i]+translation()[i]));};
+residual=function(p){if(scales[kind].some((v,i)=>v===0&&(!is2D()||i<2)&&!(kind===0&&i===2)))return NaN;return unscaledResidual(p.map((v,i)=>kind===0&&i===2?v:(v-translation()[i])/scales[kind][i]+translation()[i]));};
 grouped=function(name,i){const value=unscaledGrouped(name,i),scale=scales[kind][i];return scale===1?value:'('+value+'/('+fmt(scale)+'))';};
 function fitSidebar(){const aside=document.querySelector('aside'),items=[...aside.children];items.forEach(el=>el.style.zoom='1');const css=getComputedStyle(aside),gap=parseFloat(css.gap)||0,available=aside.clientHeight-parseFloat(css.paddingTop)-parseFloat(css.paddingBottom||0)-gap*Math.max(0,items.length-1),needed=items.reduce((sum,el)=>{const s=getComputedStyle(el);return sum+el.offsetHeight+(parseFloat(s.marginTop)||0)+(parseFloat(s.marginBottom)||0);},0);const factor=Math.min(1,available/Math.max(1,needed));items.forEach(el=>el.style.zoom=String(factor));}
 function setScale(i,n){if(!Number.isFinite(n))return;scales[kind][i]=n;syncPanel();formula();draw();}
