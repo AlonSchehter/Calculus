@@ -51,7 +51,7 @@ if(typeof module!=='undefined')module.exports=Derivatives;
 </script><script>const $=id=>document.getElementById(id),M=s=>'<math xmlns="http://www.w3.org/1998/Math/MathML"><mrow>'+s+'</mrow></math>';
 let two=false,english=false,editing=false;
 try{english=localStorage.getItem('calculus.language')==='en';}catch{}
-const states=[{text:'x^2',shown:[false,false]},{text:'x^2*y',shown:[false,false]}];
+const states=[{text:'x^2',shown:[false,false]},{text:'sin(x^2+y)',shown:[false,false]}];
 states.forEach((s,i)=>s.data=Derivatives.prepare(s.text,!!i));
 const views=['source','dx','dy'].map(id=>({id,canvas:$(id+'Canvas'),zoom:1,yaw:-.62,pitch:.58}));
 const fraction=(variable,partial)=>'<mfrac><mrow><mo>'+ (partial?'∂':'d')+'</mo><mi>f</mi></mrow><mrow><mo>'+(partial?'∂':'d')+'</mo><mi>'+variable+'</mi></mrow></mfrac>';
